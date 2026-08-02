@@ -1,0 +1,256 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { freeDecks, lockedDecks, questionNotes } from "../data/decks";
+
+const decksForClient = freeDecks.map((d) => ({
+  id: d.id,
+  name: d.name,
+  questions: d.questions.map((q) => ({ text: q, note: questionNotes[q] ?? null })),
+}));
+---
+
+<Layout
+  title="Try the Decks — QalbQuest Demo"
+  description="Open three free QalbQuest decks — Icebreakers, Spontaneous and Beliefs — and try the questions couples too often skip. Nine more decks unlock in the app."
+>
+  <div class="min-h-screen bg-background text-foreground">
+    <Header />
+    <main>
+      <section class="relative overflow-hidden">
+        <div
+          class="absolute inset-0 pointer-events-none opacity-60"
+          style="background:radial-gradient(ellipse at top, oklch(0.9 0.06 85 / 0.6), transparent 60%)"
+        >
+        </div>
+        <div class="mx-auto max-w-4xl px-6 pt-16 pb-10 text-center relative">
+          <div class="tracking-luxury text-xs text-gold-dark mb-6">FREE DEMO · 3 OF 12 DECKS</div>
+          <h1 class="font-display text-4xl md:text-6xl leading-[1.05]">
+            Pick a deck and<span class="italic text-gold-gradient"> start the conversation.</span>
+          </h1>
+          <p class="mt-6 text-lg text-muted-foreground max-w-xl mx-auto">
+            Three decks are open right here, no sign-up. The other nine unlock when you download the
+            app.
+          </p>
+        </div>
+      </section>
+
+      <section class="mx-auto max-w-4xl px-6 pb-6">
+        <div class="flex flex-wrap justify-center gap-3" id="deck-tabs">
+          {
+            freeDecks.map((deck, i) => (
+              <button
+                type="button"
+                data-deck={deck.id}
+                data-tagline={deck.tagline}
+                aria-pressed={i === 0 ? "true" : "false"}
+                class="deck-tab card-luxury rounded-full px-6 py-3 text-sm tracking-wider transition"
+              >
+                {deck.name}
+                <span class="ml-2 text-xs text-muted-foreground">{deck.questions.length}</span>
+              </button>
+            ))
+          }
+        </div>
+        <p class="mt-4 text-center text-sm text-muted-foreground" id="deck-tagline">
+          {freeDecks[0].tagline}
+        </p>
+      </section>
+
+      <section class="mx-auto max-w-3xl px-6 pb-16">
+        <div class="card-luxury rounded-3xl p-10 md:p-14 relative overflow-hidden text-center">
+          <div
+            class="absolute -top-20 -right-20 h-52 w-52 rounded-full"
+            style="background:var(--gradient-gold);opacity:0.12"
+          >
+          </div>
+          <div class="tracking-luxury text-[10px] text-gold-dark mb-6" id="card-eyebrow">
+            ICEBREAKERS · 01 / 22
+          </div>
+          <p
+            class="font-display text-2xl md:text-4xl leading-snug min-h-[6rem] flex items-center justify-center"
+            id="card-question"
+          >
+          </p>
+          <p class="mt-5 text-sm text-muted-foreground italic hidden" id="card-note"></p>
+          <div class="gold-hairline my-10"></div>
+          <div class="flex items-center justify-center gap-4">
+            <button
+              type="button"
+              id="prev-card"
+              class="inline-flex items-center justify-center rounded-full h-12 w-12 border border-gold/50 text-gold-dark hover:bg-gold/10 transition"
+              aria-label="Previous question"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg
+              >
+            </button>
+            <button
+              type="button"
+              id="next-card"
+              class="btn-gold btn-gold-hover inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm tracking-luxury uppercase"
+            >
+              Next question
+            </button>
+            <button
+              type="button"
+              id="shuffle-card"
+              class="inline-flex items-center justify-center rounded-full h-12 w-12 border border-gold/50 text-gold-dark hover:bg-gold/10 transition"
+              aria-label="Shuffle"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                ><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"></path><path
+                  d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path
+                  d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"
+                ></path></svg
+              >
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="mx-auto max-w-5xl px-6 pb-24">
+        <div class="text-center mb-12">
+          <div class="tracking-luxury text-xs text-gold-dark mb-4">9 MORE DECKS</div>
+          <h2 class="font-display text-3xl md:text-5xl">Locked until you download the app.</h2>
+          <p class="mt-4 text-muted-foreground max-w-xl mx-auto">
+            The deeper decks — faith, healing, health, dealbreakers — live inside QalbQuest, where
+            both of you answer privately, then reveal together.
+          </p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {
+            lockedDecks.map((deck) => (
+              <div class="card-luxury rounded-3xl p-8 relative overflow-hidden select-none">
+                <div class="flex items-center justify-between">
+                  <h3 class="font-display text-2xl">{deck.name}</h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="text-gold-dark shrink-0"
+                    aria-hidden="true"
+                  >
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+                <p class="mt-4 text-muted-foreground blur-[3px] leading-relaxed">{deck.teaser}</p>
+                <div class="mt-6 text-[10px] tracking-luxury text-gold-dark">LOCKED</div>
+              </div>
+            ))
+          }
+        </div>
+        <div class="mt-14 text-center">
+          <a
+            href="/#download"
+            class="btn-gold btn-gold-hover inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm tracking-luxury uppercase"
+            >Unlock all 12 decks</a
+          >
+          <p class="mt-4 text-xs text-muted-foreground tracking-wider">
+            App Store — coming soon, in 5 days
+          </p>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+
+  <script is:inline define:vars={{ decks: decksForClient }}>
+    (function () {
+      const tabs = Array.from(document.querySelectorAll(".deck-tab"));
+      const eyebrow = document.getElementById("card-eyebrow");
+      const questionEl = document.getElementById("card-question");
+      const noteEl = document.getElementById("card-note");
+      const taglineEl = document.getElementById("deck-tagline");
+      const taglines = {};
+      tabs.forEach((t) => (taglines[t.dataset.deck] = t.dataset.tagline));
+
+      let deckIndex = 0;
+      let cardIndex = 0;
+
+      function pad(n) {
+        return String(n).padStart(2, "0");
+      }
+
+      function render() {
+        const deck = decks[deckIndex];
+        const q = deck.questions[cardIndex];
+        eyebrow.textContent = `${deck.name.toUpperCase()} · ${pad(cardIndex + 1)} / ${pad(deck.questions.length)}`;
+        questionEl.textContent = q.text;
+        questionEl.animate(
+          [
+            { opacity: 0, transform: "translateY(8px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          { duration: 320, easing: "ease-out" },
+        );
+        if (q.note) {
+          noteEl.textContent = q.note;
+          noteEl.classList.remove("hidden");
+        } else {
+          noteEl.classList.add("hidden");
+        }
+        tabs.forEach((t, i) => {
+          const active = i === deckIndex;
+          t.setAttribute("aria-pressed", active ? "true" : "false");
+          t.classList.toggle("deck-tab-active", active);
+        });
+      }
+
+      tabs.forEach((tab, i) => {
+        tab.addEventListener("click", () => {
+          deckIndex = i;
+          cardIndex = 0;
+          if (taglineEl && tab.dataset.tagline) taglineEl.textContent = tab.dataset.tagline;
+          render();
+        });
+      });
+
+      document.getElementById("next-card").addEventListener("click", () => {
+        cardIndex = (cardIndex + 1) % decks[deckIndex].questions.length;
+        render();
+      });
+      document.getElementById("prev-card").addEventListener("click", () => {
+        const len = decks[deckIndex].questions.length;
+        cardIndex = (cardIndex - 1 + len) % len;
+        render();
+      });
+      document.getElementById("shuffle-card").addEventListener("click", () => {
+        const len = decks[deckIndex].questions.length;
+        let next = cardIndex;
+        while (next === cardIndex && len > 1) next = Math.floor(Math.random() * len);
+        cardIndex = next;
+        render();
+      });
+
+      render();
+    })();
+  </script>
+</Layout>
